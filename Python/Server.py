@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-from joblib import load
 import socket
 
 def cleanQuery(query):
@@ -28,15 +27,15 @@ def TransmitData(content):
     print(content)
     conn.send(bytes(str(content), 'utf-8'))  # echo
 
+print("starting")
 TCP_IP = '127.0.0.1'
 TCP_PORT = 54000
 BUFFER_SIZE = 50  # Normally 1024, but we want fast response
-knn = load('data/covidModelKNN.joblib')
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind((TCP_IP, TCP_PORT))
 s.listen(1)
-
+print("Listening for clients, a confirmation message will appear below when someone connects to me! \n")
 conn, addr = s.accept()
 print('Connection address:', addr)
 while 1:

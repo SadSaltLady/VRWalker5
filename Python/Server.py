@@ -38,9 +38,9 @@ def ProcessData(data):
     
 
 print("starting")
-TCP_IP = '127.0.0.1'
+TCP_IP = '192.168.159.45' #'127.0.0.1' local host value
 TCP_PORT = 54000
-BUFFER_SIZE = 1024  # Normally 1024, but we want fast response
+BUFFER_SIZE = 1048576  # Normally 1024, but we want fast response
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind((TCP_IP, TCP_PORT))
@@ -52,7 +52,7 @@ while True:
     data = conn.recv(BUFFER_SIZE)
     if not data: break
     str = data.decode()
-    print("received data:", str, "\n")
+    #print("received data:", str, "\n")
     fileName = ProcessData(str)
     print("processed data and created new file: " + fileName + "\n")
     

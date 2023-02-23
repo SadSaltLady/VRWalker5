@@ -45,7 +45,7 @@ def CreateFile(data):
 AwaitingFileName = False
 AwaitingData = False
 fileName = ""
-TCP_IP = '192.168.159.45' #'127.0.0.1' local host value
+TCP_IP = '10.202.203.89' #'127.0.0.1' local host value
 TCP_PORT = 54000
 BUFFER_SIZE = 1048576  # Normally 1024, but we want fast response
 
@@ -66,9 +66,9 @@ while True:
         fileName = CreateFile(str)
         AwaitingFileName = False
         AwaitingData = True
-    if (str == "start")
+    if (str == "start"):
         AwaitingFileName = True
-    if (str == "close")
+    if (str == "stop"):
         AwaitingData = False
 
     #query = cleanQuery(data)

@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 import socket
 
+file = None
+
 def cleanQuery(query):
     temp = ""
     for byte in query:
@@ -28,11 +30,9 @@ def TransmitData(content):
     conn.send(bytes(str(content), 'utf-8'))  # echo
 
 
-def ProcessData(fileName, data):
-    file = open(fileName, 'w')
+def ProcessData(data):
     data = data + "\n"
     file.write(data)
-    file.close()
     return data
 
 def CreateFile(data):
@@ -47,7 +47,7 @@ AwaitingData = False
 fileName = ""
 TCP_IP = '10.202.203.89' #'127.0.0.1' local host value
 TCP_PORT = 54000
-BUFFER_SIZE = 1048576  # Normally 1024, but we want fast response
+BUFFER_SIZE = 1024  # Normally 1024, but we want fast response
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind((TCP_IP, TCP_PORT))
@@ -59,17 +59,21 @@ while True:
     data = conn.recv(BUFFER_SIZE)
     if not data: break
     str = data.decode()
-    if AwaitingData:
-        output = ProcessData(fileName, str)
-        print("Wrote: " + output)
-    if AwaitingFileName:
-        fileName = CreateFile(str)
-        AwaitingFileName = False
-        AwaitingData = True
     if (str == "start"):
         AwaitingFileName = True
     if (str == "stop"):
         AwaitingData = False
+        file.close()
+    if AwaitingFileName:
+        fileName = CreateFile(str)
+        AwaitingFileName = False
+        AwaitingData = True
+    if AwaitingData:
+        output = ProcessData(str)
+        print("Wrote: " + output)
+    
+    
+ 
 
     #query = cleanQuery(data)
     #if (validateQuery(query, 16)):

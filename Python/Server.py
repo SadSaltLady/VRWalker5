@@ -27,17 +27,24 @@ def TransmitData(content):
     print(content)
     conn.send(bytes(str(content), 'utf-8'))  # echo
 
-def ProcessData(data): 
-    refined = data.split("?")
-    file = open(refined[0], 'w')
-    if len(refined) > 1: 
-        file.write(refined[1])
-        file.close() 
-    return refined[0]
+
+def ProcessData(fileName, data):
+    file = open(fileName, 'w')
+    data = data + "\n"
+    file.write(data)
+    file.close()
+    return data
+
+def CreateFile(data):
+    filename = data + ".csv"
+    file = open(filename, 'w')
+    return filename
 
     
 
-print("starting")
+AwaitingFileName = False
+AwaitingData = False
+fileName = ""
 TCP_IP = '192.168.159.45' #'127.0.0.1' local host value
 TCP_PORT = 54000
 BUFFER_SIZE = 1048576  # Normally 1024, but we want fast response
@@ -52,11 +59,18 @@ while True:
     data = conn.recv(BUFFER_SIZE)
     if not data: break
     str = data.decode()
-    #print("received data:", str, "\n")
-    fileName = ProcessData(str)
-    print("processed data and created new file: " + fileName + "\n")
-    
-    
+    if AwaitingData:
+        output = ProcessData(fileName, str)
+        print("Wrote: " + output)
+    if AwaitingFileName:
+        fileName = CreateFile(str)
+        AwaitingFileName = False
+        AwaitingData = True
+    if (str == "start")
+        AwaitingFileName = True
+    if (str == "close")
+        AwaitingData = False
+
     #query = cleanQuery(data)
     #if (validateQuery(query, 16)):
     #    TransmitData("Data Received")

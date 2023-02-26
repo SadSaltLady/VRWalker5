@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import socket
 
-file = None
+FILE = None
 
 def cleanQuery(query):
     temp = ""
@@ -32,20 +32,21 @@ def TransmitData(content):
 
 def ProcessData(data):
     data = data + "\n"
-    file.write(data)
+    FILE.write(data)
     return data
 
 def CreateFile(data):
     filename = data + ".csv"
     file = open(filename, 'w')
-    return filename
+    print(type(file))
+    return filename, file
 
     
 
 AwaitingFileName = False
 AwaitingData = False
 fileName = ""
-TCP_IP = '10.202.203.89' #'127.0.0.1' local host value
+TCP_IP = "192.168.146.45" #'127.0.0.1' local host value
 TCP_PORT = 54000
 BUFFER_SIZE = 1024  # Normally 1024, but we want fast response
 
@@ -61,14 +62,15 @@ while True:
     str = data.decode()
     if (str == "start"):
         AwaitingFileName = True
-    if (str == "stop"):
+    elif (str == "stop"):
         AwaitingData = False
-        file.close()
-    if AwaitingFileName:
-        fileName = CreateFile(str)
+        FILE.close()
+    elif AwaitingFileName:
+        fileName, f = CreateFile(str)
+        FILE = f
         AwaitingFileName = False
         AwaitingData = True
-    if AwaitingData:
+    elif AwaitingData:
         output = ProcessData(str)
         print("Wrote: " + output)
     

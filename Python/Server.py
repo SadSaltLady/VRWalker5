@@ -48,7 +48,7 @@ AwaitingData = False
 fileName = ""
 TCP_IP = "192.168.146.45" #'127.0.0.1' local host value
 TCP_PORT = 54000
-BUFFER_SIZE = 1024  # Normally 1024, but we want fast response
+BUFFER_SIZE = 16384  # Normally 1024, but we want fast response
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind((TCP_IP, TCP_PORT))

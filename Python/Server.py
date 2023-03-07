@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 import socket
 
+FILE = None
+
 def cleanQuery(query):
     temp = ""
     for byte in query:
@@ -28,26 +30,25 @@ def TransmitData(content):
     conn.send(bytes(str(content), 'utf-8'))  # echo
 
 
-def ProcessData(fileName, data):
-    file = open(fileName, 'w')
+def ProcessData(data):
     data = data + "\n"
-    file.write(data)
-    file.close()
+    FILE.write(data)
     return data
 
 def CreateFile(data):
     filename = data + ".csv"
     file = open(filename, 'w')
-    return filename
+    print(type(file))
+    return filename, file
 
     
 
 AwaitingFileName = False
 AwaitingData = False
 fileName = ""
-TCP_IP = '192.168.159.45' #'127.0.0.1' local host value
+TCP_IP = "192.168.137.37" #'127.0.0.1' local host value
 TCP_PORT = 54000
-BUFFER_SIZE = 1048576  # Normally 1024, but we want fast response
+BUFFER_SIZE = 16384  # Normally 1024, but we want fast response
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind((TCP_IP, TCP_PORT))
@@ -59,17 +60,22 @@ while True:
     data = conn.recv(BUFFER_SIZE)
     if not data: break
     str = data.decode()
-    if AwaitingData:
-        output = ProcessData(fileName, str)
-        print("Wrote: " + output)
-    if AwaitingFileName:
-        fileName = CreateFile(str)
+    if (str == "start"):
+        AwaitingFileName = True
+    elif (str == "stop"):
+        AwaitingData = False
+        FILE.close()
+    elif AwaitingFileName:
+        fileName, f = CreateFile(str)
+        FILE = f
         AwaitingFileName = False
         AwaitingData = True
-    if (str == "start")
-        AwaitingFileName = True
-    if (str == "close")
-        AwaitingData = False
+    elif AwaitingData:
+        output = ProcessData(str)
+        print("Wrote: " + output)
+    
+    
+ 
 
     #query = cleanQuery(data)
     #if (validateQuery(query, 16)):

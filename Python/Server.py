@@ -43,9 +43,8 @@ def ProcessData(data):
     return data
 
 def CreateFile(data):
-    filename = data + ".csv"
+    filename = data
     file = open(filename, 'w')
-    print(type(file))
     return filename, file
 
 def ProcessCommand(data):
@@ -53,6 +52,7 @@ def ProcessCommand(data):
     str = data.decode()
     commands = str.split(Delimiter)
     for i in range(len(commands)):
+        print(commands[i])
         DataQueue.put(commands[i])
 
 
@@ -62,19 +62,19 @@ def ProcessQueue():
     if DataQueue.empty():
         return
     while not DataQueue.empty():
-        values = json.loads(DataQueue.get())
-        # if command is FileName, then create the file
-        if values.has_key("FileName"):
-            fileName, f = CreateFile(values["FileName"])
+        str = DataQueue.get()
+        values = str.split(":")
+        if "FileName" == values[0]:
+            fileName, f = CreateFile(values[1])
             FILE = f
             return
         # if command is stop
-        if values.has_key("Stop"):
+        if "Stop" == values[0]:
             FILE.close()
             return
         # if command is data
-        if values.has_key("data"):
-            ProcessData(values["data"])
+        if "data" == values[0]:
+            ProcessData(values[1])
             return
 
 

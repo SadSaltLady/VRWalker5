@@ -62,7 +62,7 @@ def ProcessQueue():
     if DataQueue.empty():
         return
     while not DataQueue.empty():
-        values = DataQueue.get()
+        values = json.loads(DataQueue.get())
         # if command is FileName, then create the file
         if values.has_key("FileName"):
             fileName, f = CreateFile(values["FileName"])

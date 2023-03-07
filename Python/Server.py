@@ -46,7 +46,7 @@ def CreateFile(data):
 AwaitingFileName = False
 AwaitingData = False
 fileName = ""
-TCP_IP = "192.168.146.45" #'127.0.0.1' local host value
+TCP_IP = "192.168.137.37" #'127.0.0.1' local host value
 TCP_PORT = 54000
 BUFFER_SIZE = 16384  # Normally 1024, but we want fast response
 

@@ -2,6 +2,8 @@
 .vs/
 Python/.idea
 
+*.csv
+
 # Compiled Object files
 *.slo
 *.lo

@@ -63,13 +63,13 @@ def ProcessQueue():
         return
     while not DataQueue.empty():
         values = DataQueue.get()
-        # if command is start
+        # if command is FileName, then create the file
         if values.has_key("FileName"):
             fileName, f = CreateFile(values["FileName"])
             FILE = f
             return
         # if command is stop
-        if values.has_key("stop"):
+        if values.has_key("Stop"):
             FILE.close()
             return
         # if command is data
